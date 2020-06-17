@@ -11,3 +11,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.timeline-page {
+  background-color: rgba(111, 111, 111, 0.45);
+}
