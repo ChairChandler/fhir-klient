@@ -1,0 +1,11 @@
+.grey {
+    background-color: rgb(82, 82, 82);
+}
+
+.min-padding {
+    padding: 1%;
+}
+
+#table-patient-info {
+    background-color: white;
+}

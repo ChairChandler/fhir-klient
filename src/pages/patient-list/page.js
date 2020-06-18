@@ -1,13 +1,19 @@
 import React from 'react';
 import { PatientsList } from './content/table/patients-list'
-import serverInfo from 'src/config/server.json'
 import PatientInfoPage from 'src/pages/patient-info/page'
+import { PatientsListService } from 'src/services/patients-list'
 import './style.css'
 
 export default class extends React.Component {
     constructor(props) {
         super(props)
         this.state = {}
+        this.asyncInit()
+    }
+
+    asyncInit = async () => {
+        const { cols: columns, data } = await PatientsListService.download()
+        this.setState({ columns, data })
     }
 
     changeID = (id) => {
@@ -16,8 +22,9 @@ export default class extends React.Component {
     }
 
     render = () => <div className="table-content">
-        <PatientsList
-            endpoint={`http://${serverInfo.ip}:${serverInfo.port}/patients_list`}
-            onPatientSelected={this.changeID} />
+        <PatientsList 
+        columns={this.state.columns}
+        data={this.state.data}
+        onPatientSelected={this.changeID} />
     </div>
 }
