@@ -1,15 +1,16 @@
 import React from 'react';
-import MaterialTable from 'material-table';
 import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
+import './style.css'
 
-
-class PatientInfo extends React.Component {
+export class PatientInfo extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            patient: [],
             observations: [],
+            medications: [],
             loading: true
         }
         this.download()
@@ -19,19 +20,19 @@ class PatientInfo extends React.Component {
         const bs = await fetch(`${this.props.endpoint}?pid=${this.props.id}`)
         const data = await bs.json()
 
-        console.log(data)
+        const patient = this.preparePatientData(data.patient)
         const observations = this.prepareObservationData(data.observation)
-        this.setState({ observations, loading: false })
+        const medications = this.prepareMedicationData(data.medicationRequest)
+
+        this.setState({ patient, observations, medications, loading: false })
+        console.log(this.state)
     }
 
     prepareObservationData = (observations) => {
         const dataToVisualise = []
 
         for (const o of observations) {
-            const { effectiveDateTime, status, valueQuantity, component } = o
-            if (status !== 'final') {
-                continue
-            }
+            const { effectiveDateTime, valueQuantity, component } = o
 
             const observationType = o.code.text
             if (valueQuantity) {
@@ -56,14 +57,45 @@ class PatientInfo extends React.Component {
         return dataToVisualise
     }
 
-    /*preparePatientData = (patient) => {
-        for(const p of patient) {
-            p.resourceType
-            p.meta.lastUpdated
+    preparePatientData = (patient) => {
+        const { birthDate, gender } = patient
+        const { communication: { language: { text: language = null } = {} } = {} } = patient
+        const { address: [{ city, country, state, postalCode, line: [street] }] } = patient
+        const { name: [{ family: lastname, given: name, prefix: namePrefix }] } = patient
 
-
+        return {
+            name: `${namePrefix} ${name} ${lastname}`,
+            birthDate,
+            gender,
+            language,
+            address: `${street}, ${city} ${postalCode}, ${state}, ${country}`
         }
-    }*/
+    }
+
+    prepareMedicationData = (medication) => {
+        const dataToVisualise = []
+
+        for (const m of medication) {
+            const { authoredOn, dosageInstruction } = m
+            const { medicationCodeableConcept: { text: medicationType } } = m
+            const { requester: { display: doctor } } = m
+
+            const [{ asNeededBoolean: asNeeded, doseAndRate = null, timing = null }] = dosageInstruction ?? [{}]
+            const [{ doseQuantity: { value: doseQuantity = null } = {} } = {}] = doseAndRate ?? []
+            const { rate: dosageTiming = null } = timing ?? {}
+
+            dataToVisualise.push({
+                authoredOn, medicationType, doctor,
+                dosageInstruction: {
+                    asNeeded,
+                    doseQuantity,
+                    dosageTiming
+                }
+            })
+        }
+
+        return dataToVisualise
+    }
 
     parseDate = (date) => {
         const k = new Date(date)

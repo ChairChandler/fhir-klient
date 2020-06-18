@@ -1,24 +1,33 @@
 import React from 'react';
-import serverInfo from './config/server.json'
-import PatientsList from './components/patients-list'
-import PatientInfo from './components/patient-info'
+import PatientListPage from 'src/pages/patient-list/page'
+import PatientInfoPage from 'src/pages/patient-info/page'
 
 class App extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {}
+        this.state = { actualPage: PatientListPage, pageData: null }
     }
 
-    changeID = (id) => {
-        this.setState({ id })
+    changeComponent = ({ dest, data }) => {
+        this.setState({ actualPage: dest, pageData: data })
     }
 
     render = () => {
+        switch (this.state.actualPage) {
+            case PatientListPage:
+                return <PatientListPage
+                    onChangeComponent={this.changeComponent}
+                    {...this.state.pageData}
+                />
 
-        if (this.state.id) {
-            return <PatientInfo endpoint={`http://${serverInfo.ip}:${serverInfo.port}/patient_info`} id={this.state.id}></PatientInfo>
-        } else {
-            return <PatientsList endpoint={`http://${serverInfo.ip}:${serverInfo.port}/patients_list`} onPatientSelected={this.changeID}></PatientsList>
+            case PatientInfoPage:
+                return <PatientInfoPage
+                    onChangeComponent={this.changeComponent}
+                    {...this.state.pageData}
+                />
+
+            default:
+                return <></>
         }
     }
 }

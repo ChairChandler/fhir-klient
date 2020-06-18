@@ -1,7 +1,7 @@
 import React from 'react';
 import MaterialTable from 'material-table';
 
-class PatientsList extends React.Component {
+export class PatientsList extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -33,5 +33,3 @@ class PatientsList extends React.Component {
         </MaterialTable>
     )
 }
-
-export default PatientsList
