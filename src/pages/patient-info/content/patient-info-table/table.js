@@ -11,7 +11,7 @@ export class PatientTable extends React.Component {
         }
 
         return <>
-            <table className="table table-striped table-bordered table-sm">
+            <table className="table table-striped table-bordered table-sm" style={{ 'background-color': 'white' }}>
                 <tbody>
                     {rows}
                 </tbody>

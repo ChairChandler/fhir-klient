@@ -1,3 +1,16 @@
 #timeline {
   background-color: rgb(82, 82, 82);
 }
+
+#date-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.date-container-element {
+  display: flex;
+  flex-direction: column;
+  margin: 5px;
+  color: #b9b9b9;
+}

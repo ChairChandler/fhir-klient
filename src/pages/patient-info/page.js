@@ -33,12 +33,12 @@ export default class extends React.Component {
                 observations: this.state.observations ?? []
             }} />
 
-        return <>
+        const medicationsDateAmount = Object.keys(this.state.medications ?? {}).length
+        const observationsDateAmount = Object.keys(this.state.observations ?? {}).length
+        return <div className={(medicationsDateAmount || observationsDateAmount ? "grey" : '')}>
             {nav}
-            <div className={"min-padding " + (this.state.medications?.length || this.state.observations?.length ? "grey" : '')}>
-                <div id="table-patient-info">{baseInfo}</div>
-            </div>
+            <div className="min-padding" id="table-patient-info">{baseInfo}</div>
             {timeline}
-        </>
+        </div>
     }
 }
