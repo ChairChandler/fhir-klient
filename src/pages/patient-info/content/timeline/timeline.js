@@ -3,7 +3,8 @@ import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
 import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
-import './style.css'
+import './timeline-style.css'
+import { DialogInfo } from './modal'
 
 export class PatientInfo extends React.Component {
     constructor(props) {
@@ -128,8 +129,11 @@ export class PatientInfo extends React.Component {
     }
 
     onClickIcon = (date, arrayIndex) => {
-        console.clear()
-        console.log(this.state.filteredTimeline[date][arrayIndex])
+        const data = this.state.filteredTimeline[date][arrayIndex]
+        this.setState(state => {
+            state.dialogData = data
+            return state
+        })
     }
 
     render = () => {
@@ -192,6 +196,11 @@ export class PatientInfo extends React.Component {
             </div>
 
             {observationTimeline}
+
+            {
+                this.state.dialogData &&
+                <DialogInfo data={this.state.dialogData} onClose={() => this.setState(state => delete state.dialogData)}/>
+            }
         </div>
     }
 }
