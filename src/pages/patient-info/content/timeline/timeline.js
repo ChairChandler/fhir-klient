@@ -52,7 +52,7 @@ export class PatientInfo extends React.Component {
 
     parseDateToTimeLineDate = date => {
         const k = new Date(date)
-        return `${k.getDate()}/${k.getMonth()}/${k.getFullYear()} - ${k.getHours()}:${k.getMinutes()}`
+        return `${k.getDate()}/${k.getMonth() + 1}/${k.getFullYear()} - ${k.getHours()}:${k.getMinutes()}`
     }
 
     parseDateToDateInput = date => {

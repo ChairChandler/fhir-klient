@@ -2,6 +2,7 @@ import React from 'react';
 import { Navbar } from 'src/components/navbar/navbar'
 import { PatientInfo } from './content/timeline/timeline'
 import { PatientTable } from './content/patient-info-table/table'
+import { MeasureChart } from './content/chart/chart'
 import PatientListPage from 'src/pages/patient-list/page'
 import { PatientInfoService } from 'src/services/patient-info'
 import './style.css'
@@ -35,10 +36,14 @@ export default class extends React.Component {
 
         const medicationsDateAmount = Object.keys(this.state.medications ?? {}).length
         const observationsDateAmount = Object.keys(this.state.observations ?? {}).length
+
         return <div className={(medicationsDateAmount || observationsDateAmount ? "grey" : '')}>
             {nav}
             <div className="min-padding" id="table-patient-info">{baseInfo}</div>
             {timeline}
+            {   Object.keys(this.state.observations ?? {}).length &&
+                <MeasureChart data={this.state.observations} />
+            }
         </div>
     }
 }

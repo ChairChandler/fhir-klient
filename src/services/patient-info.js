@@ -8,7 +8,6 @@ export const PatientInfoService = {
         const patient = preparePatientData(data.patient)
         const observations = prepareObservationData(data.observation)
         const medications = prepareMedicationData(data.medicationRequest)
-
         return { patient, observations, medications }
     }
 }
