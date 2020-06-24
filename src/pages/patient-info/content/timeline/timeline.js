@@ -26,8 +26,7 @@ export class PatientInfo extends React.Component {
         this.setState(state => {
             state = {
                 minDate, maxDate, timeline,
-                loading: false,
-
+                loading: false
             }
             return state
         }, () => this.setState(state => {
